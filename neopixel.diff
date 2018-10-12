@@ -1,0 +1,35 @@
+diff --git a/Adafruit_NeoPixel.cpp b/Adafruit_NeoPixel.cpp
+index 584abd5..8a5d037 100644
+--- a/Adafruit_NeoPixel.cpp
++++ b/Adafruit_NeoPixel.cpp
+@@ -32,6 +32,7 @@
+   <http://www.gnu.org/licenses/>.
+   -------------------------------------------------------------------------*/
+ 
++#include <string.h>
+ #include "Adafruit_NeoPixel.h"
+ 
+ // Constructor when length, pin and type are known at compile-time:
+@@ -102,6 +103,10 @@ extern "C" void ICACHE_RAM_ATTR espShow(
+   uint8_t pin, uint8_t *pixels, uint32_t numBytes, uint8_t type);
+ #endif // ESP8266
+ 
++void Adafruit_NeoPixel::shift_right(void) {
++  memmove(&pixels[3],&pixels[0],3*(numLEDs-1));
++}
++
+ void Adafruit_NeoPixel::show(void) {
+ 
+   if(!pixels) return;
+diff --git a/Adafruit_NeoPixel.h b/Adafruit_NeoPixel.h
+index a63a6b3..253c64e 100644
+--- a/Adafruit_NeoPixel.h
++++ b/Adafruit_NeoPixel.h
+@@ -53,6 +53,7 @@ class Adafruit_NeoPixel {
+   void
+     begin(void),
+     show(void),
++    shift_right(void),
+     setPin(uint8_t p),
+     setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b),
+     setPixelColor(uint16_t n, uint32_t c),
